@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina4_7" orientation="landscape" appearance="light"/>
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -21,17 +21,17 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Instagrid" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Instagrid" textAlignment="center" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q0l-06-YvQ">
-                                <rect key="frame" x="30" y="30" width="126.5" height="41.5"/>
+                                <rect key="frame" x="124.5" y="30" width="126.5" height="41.5"/>
                                 <fontDescription key="fontDescription" name="ThirstySoftRegular" family="Thirsty Soft" pointSize="32"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Arrow Up" translatesAutoresizingMaskIntoConstraints="NO" id="ahx-N4-EtC">
-                                <rect key="frame" x="87.5" y="171" width="12" height="12"/>
+                                <rect key="frame" x="181.5" y="144" width="12" height="12"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="12" id="Nu4-e9-5sE"/>
                                     <constraint firstAttribute="width" constant="12" id="YOJ-0z-2UX"/>
@@ -39,13 +39,13 @@
                                 <variation key="heightClass=compact" image="Arrow Left"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Swipe up to share" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QC9-66-tJa">
-                                <rect key="frame" x="28.5" y="191" width="129.5" height="23.5"/>
+                                <rect key="frame" x="123" y="164" width="129.5" height="23.5"/>
                                 <fontDescription key="fontDescription" name="Delm-Medium" family="Delm" pointSize="21"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dJi-fM-Mwq">
-                                <rect key="frame" x="193.5" y="30" width="315" height="315"/>
+                                <rect key="frame" x="30" y="193.5" width="315" height="315"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="oQT-ZI-x3z" userLabel="Frame Stack View">
                                         <rect key="frame" x="12" y="12" width="291" height="291"/>
@@ -112,7 +112,7 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Umv-E3-zqb" userLabel="Layout Stack View">
-                                <rect key="frame" x="538.5" y="30" width="98.5" height="315"/>
+                                <rect key="frame" x="30" y="538.5" width="315" height="98.5"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zdb-PV-b4p" userLabel="LayoutButton1">
                                         <rect key="frame" x="0.0" y="0.0" width="98.5" height="98.5"/>
@@ -126,7 +126,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eqw-H9-Dui" userLabel="LayoutButton2">
-                                        <rect key="frame" x="0.0" y="108.5" width="98.5" height="98"/>
+                                        <rect key="frame" x="108.5" y="0.0" width="98" height="98.5"/>
                                         <state key="normal" backgroundImage="unselect2"/>
                                         <state key="selected" backgroundImage="select2"/>
                                         <connections>
@@ -134,7 +134,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="axS-b3-RGD" userLabel="LayoutButton3">
-                                        <rect key="frame" x="0.0" y="216.5" width="98.5" height="98.5"/>
+                                        <rect key="frame" x="216.5" y="0.0" width="98.5" height="98.5"/>
                                         <state key="normal" backgroundImage="unselect3"/>
                                         <state key="selected" backgroundImage="select3"/>
                                         <connections>

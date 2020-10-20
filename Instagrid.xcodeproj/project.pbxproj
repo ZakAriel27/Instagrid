@@ -15,6 +15,7 @@
 		5033B1332532F98C00300EF8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5033B1312532F98C00300EF8 /* LaunchScreen.storyboard */; };
 		5033B13D25330C2300300EF8 /* ThirstySoftRegular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5033B13B25330C2300300EF8 /* ThirstySoftRegular.otf */; };
 		5033B13E25330C2300300EF8 /* Delm-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5033B13C25330C2300300EF8 /* Delm-Medium.otf */; };
+		50706D40253F695B00010AFC /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50706D3F253F695B00010AFC /* ImagePicker.swift */; };
 		50F99419253CE71A00E2552B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 50F99418253CE71A00E2552B /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 		5033B1342532F98C00300EF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5033B13B25330C2300300EF8 /* ThirstySoftRegular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ThirstySoftRegular.otf; sourceTree = "<group>"; };
 		5033B13C25330C2300300EF8 /* Delm-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Delm-Medium.otf"; sourceTree = "<group>"; };
+		50706D3F253F695B00010AFC /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		50F99418253CE71A00E2552B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,6 +64,7 @@
 		5033B1252532F98800300EF8 /* Instagrid */ = {
 			isa = PBXGroup;
 			children = (
+				50706D3E253F690F00010AFC /* Models */,
 				50F99416253CE2B100E2552B /* Views */,
 				50F99417253CE31400E2552B /* Controllers */,
 				5033B13A25330BB800300EF8 /* Ressources */,
@@ -87,6 +90,14 @@
 				5033B13B25330C2300300EF8 /* ThirstySoftRegular.otf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		50706D3E253F690F00010AFC /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				50706D3F253F695B00010AFC /* ImagePicker.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		50F99416253CE2B100E2552B /* Views */ = {
@@ -183,6 +194,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5033B12B2532F98800300EF8 /* ViewController.swift in Sources */,
+				50706D40253F695B00010AFC /* ImagePicker.swift in Sources */,
 				5033B1272532F98800300EF8 /* AppDelegate.swift in Sources */,
 				5033B1292532F98800300EF8 /* SceneDelegate.swift in Sources */,
 			);
