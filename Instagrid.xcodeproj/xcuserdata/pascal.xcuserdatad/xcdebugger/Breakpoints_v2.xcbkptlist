@@ -10,7 +10,7 @@
             uuid = "7B40C07E-5A4A-4E8A-A593-2464ACFCCB47"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
-            continueAfterRunningActions = "Yes"
+            continueAfterRunningActions = "No"
             symbolName = "UIViewAlertForUnsatisfiableConstraints"
             moduleName = "">
             <Actions>

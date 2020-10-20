@@ -9,10 +9,12 @@
 import UIKit
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-  var viewOrientation = 0   // Orientation rawValue
-  var layoutUsed      = 0   // layout to be displayed
-  var photoNum        = 0   // Number corresponding to the currently selected photos
-  var indexBox        = 0   // Photo frame button pressed
+  var viewOrientation = 0         // Orientation rawValue
+  var layoutUsed      = 0         // layout to be displayed
+  var frameFilling    = 0         // Calculated value to know boxes containing a photo
+  var tagBox          = 0         // Tag corresponding to the button pressed
+  var iTag            = [0,0,0,0] // Indirection between tags and indexes
+  
   let imagePicker     = UIImagePickerController()
 
   @IBOutlet var       photoButtons: [UIButton]!
@@ -26,7 +28,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
   }
   
   @IBAction func boxChoice(_ sender: UIButton) {
-    indexBox = sender.tag
+    tagBox = sender.tag
     boxChosen()
   }
   
@@ -37,6 +39,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     imagePicker.delegate = self
     let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(swipePhotoView(_:)))
     photoView.addGestureRecognizer(panGestureRecognizer)
+    tagOrder()
     orientationUpdate()
     layoutChosen(0)
   }
@@ -51,6 +54,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     super.viewWillTransition(to: size, with: coordinator)
   }
   
+  func tagOrder() {
+    for index in 0...photoButtons.count - 1 {
+      iTag[photoButtons[index].tag] = index
+    }
+  }
+  
   func orientationUpdate() {
     viewOrientation = UIApplication.shared.statusBarOrientation.rawValue
     swipeLabel.text = viewOrientation < 3 ? "Swipe Up to share" : "Swipe Left to share"
@@ -60,38 +69,37 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     layoutButtons[layoutUsed].isSelected = false
     layoutUsed = tag
     layoutButtons[layoutUsed].isSelected = true
-
-    let frameCase = photoNum > 0  && layoutUsed < 2 ? layoutUsed*10 + photoNum : 0
+    let frameCase = frameFilling > 0  && layoutUsed < 2 ? layoutUsed*10 + frameFilling : 0
     switch frameCase {  // Photos hidden by the new layout move to empty visible box
       case  2,7,12,17:
-        photoButtons[0].setImage(photoButtons[1].currentImage, for: UIControl.State.normal)
-        photoButtons[1].setImage(UIImage(named: "PlusPhoto"), for: UIControl.State.normal)
-        photoNum += 1 - 2
+        photoButtons[iTag[0]].setImage(photoButtons[iTag[1]].currentImage, for: UIControl.State.normal)
+        photoButtons[iTag[1]].setImage(UIImage(named: "PlusPhoto"), for: UIControl.State.normal)
+        frameFilling += 1 - 2
       case  3,8:
-        photoButtons[3].setImage(photoButtons[1].currentImage, for: UIControl.State.normal)
-        photoButtons[1].setImage(UIImage(named: "PlusPhoto"), for: UIControl.State.normal)
-        photoNum += 10 - 2
+        photoButtons[iTag[3]].setImage(photoButtons[iTag[1]].currentImage, for: UIControl.State.normal)
+        photoButtons[iTag[1]].setImage(UIImage(named: "PlusPhoto"), for: UIControl.State.normal)
+        frameFilling += 10 - 2
       case 13:
-        photoButtons[2].setImage(photoButtons[1].currentImage, for: UIControl.State.normal)
-        photoButtons[1].setImage(UIImage(named: "PlusPhoto"), for: UIControl.State.normal)
-        photoNum += 5 - 2
+        photoButtons[iTag[2]].setImage(photoButtons[iTag[1]].currentImage, for: UIControl.State.normal)
+        photoButtons[iTag[1]].setImage(UIImage(named: "PlusPhoto"), for: UIControl.State.normal)
+        frameFilling += 5 - 2
       case 20,21,22,23:
-        photoButtons[2].setImage(photoButtons[3].currentImage, for: UIControl.State.normal)
-        photoButtons[3].setImage(UIImage(named: "PlusPhoto"), for: UIControl.State.normal)
-        photoNum += 5 - 10
+        photoButtons[iTag[2]].setImage(photoButtons[iTag[3]].currentImage, for: UIControl.State.normal)
+        photoButtons[iTag[3]].setImage(UIImage(named: "PlusPhoto"), for: UIControl.State.normal)
+        frameFilling += 5 - 10
       case 25,26:
-        photoButtons[1].setImage(photoButtons[3].currentImage, for: UIControl.State.normal)
-        photoButtons[3].setImage(UIImage(named: "PlusPhoto"), for: UIControl.State.normal)
-        photoNum += 2 - 10
+        photoButtons[iTag[1]].setImage(photoButtons[iTag[3]].currentImage, for: UIControl.State.normal)
+        photoButtons[iTag[3]].setImage(UIImage(named: "PlusPhoto"), for: UIControl.State.normal)
+        frameFilling += 2 - 10
       case 27:
-        photoButtons[0].setImage(photoButtons[3].currentImage, for: UIControl.State.normal)
-        photoButtons[3].setImage(UIImage(named: "PlusPhoto"), for: UIControl.State.normal)
-        photoNum += 1 - 10
+        photoButtons[iTag[0]].setImage(photoButtons[iTag[3]].currentImage, for: UIControl.State.normal)
+        photoButtons[iTag[3]].setImage(UIImage(named: "PlusPhoto"), for: UIControl.State.normal)
+        frameFilling += 1 - 10
       default:
         break
     }
-    photoButtons[1].isHidden = layoutUsed == 0 ? true : false
-    photoButtons[3].isHidden = layoutUsed == 1 ? true : false
+    photoButtons[iTag[1]].isHidden = layoutUsed == 0 ? true : false
+    photoButtons[iTag[3]].isHidden = layoutUsed == 1 ? true : false
   }
   
   func boxChosen() {
@@ -105,8 +113,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
   
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
     if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-      photoNum += photoButtons[indexBox].image(for: UIControl.State.normal)?.description.contains("PlusPhoto") ?? false ? indexBox*indexBox + 1 : 0
-      photoButtons[indexBox].setImage(pickedImage, for: UIControl.State.normal)
+      frameFilling += photoButtons[iTag[tagBox]].image(for: UIControl.State.normal)?.description.contains("PlusPhoto") ?? false ? tagBox*tagBox + 1 : 0
+      photoButtons[iTag[tagBox]].setImage(pickedImage, for: UIControl.State.normal)
       dismiss(animated: true, completion: nil)
     }
   }
@@ -155,7 +163,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     UIView.animate(withDuration: 0.4, animations: {
       self.photoView.transform = translationEnd}, completion: {
         (succes) in
-        if (self.photoNum == 16 && self.layoutUsed == 0) || (self.photoNum == 8 && self.layoutUsed == 1) || (self.photoNum == 18 && self.layoutUsed == 2) {
+        if (self.frameFilling == 16 && self.layoutUsed == 0) || (self.frameFilling == 8 && self.layoutUsed == 1) || (self.frameFilling == 18 && self.layoutUsed == 2) {
           self.sendPhotoView()
         } else {
           self.showMessage()
