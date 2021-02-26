@@ -12,16 +12,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
   var viewOrientation = 0         // Orientation rawValue
   var layoutUsed      = 0         // layout to be displayed
   var frameFilling    = 0         // Calculated value to know boxes containing a photo
-  var tagBox          = 0         // Tag corresponding to the button pressed
+  var tagBox          = 0         // Tag corresponding to the button pressed (image box)
   var iTag            = [0,0,0,0] // Indirection between tags and indexes
   
   let imagePicker     = UIImagePickerController()
 
-  @IBOutlet var       photoButtons: [UIButton]!
-  @IBOutlet weak var  photoView: UIView!
-  @IBOutlet var       photos: [UIImageView]!
-  @IBOutlet var       layoutButtons: [UIButton]!
-  @IBOutlet weak var  swipeLabel: UILabel!
+  @IBOutlet var       photoButtons: [UIButton]!   // Table of buttons in the layout displayed
+  @IBOutlet weak var  photoView: UIView!          // View corresponding to the layout and photos displayed
+ // @IBOutlet var       photos: [UIImageView]!      // ?
+  @IBOutlet var       layoutButtons: [UIButton]!  // Table of buttons corresponding to the 3 layout models
+  @IBOutlet weak var  swipeLabel: UILabel!        // Swipe Label
   
   @IBAction func layoutChoice(_ sender: UIButton) {
     layoutChosen(sender.tag)
@@ -54,23 +54,27 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     super.viewWillTransition(to: size, with: coordinator)
   }
   
+  // Need to adjust tag value as button order given by xCode can't be predicted
   func tagOrder() {
     for index in 0...photoButtons.count - 1 {
       iTag[photoButtons[index].tag] = index
     }
   }
   
+  // Adjust Swipe label according to orientation
   func orientationUpdate() {
     viewOrientation = UIApplication.shared.statusBarOrientation.rawValue
     swipeLabel.text = viewOrientation < 3 ? "Swipe Up to share" : "Swipe Left to share"
   }
 
+  // Layout selected by user
   func layoutChosen(_ tag: Int) {
     layoutButtons[layoutUsed].isSelected = false
     layoutUsed = tag
     layoutButtons[layoutUsed].isSelected = true
+    // Move if necessary and possible photo made invisible
     let frameCase = frameFilling > 0  && layoutUsed < 2 ? layoutUsed*10 + frameFilling : 0
-    switch frameCase {  // Photos hidden by the new layout move to empty visible box
+    switch frameCase {
       case  2,7,12,17:
         photoButtons[iTag[0]].setImage(photoButtons[iTag[1]].currentImage, for: UIControl.State.normal)
         photoButtons[iTag[1]].setImage(UIImage(named: "PlusPhoto"), for: UIControl.State.normal)
@@ -98,10 +102,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
       default:
         break
     }
+    // Show-hide boxes according to the layout choosen
     photoButtons[iTag[1]].isHidden = layoutUsed == 0 ? true : false
     photoButtons[iTag[3]].isHidden = layoutUsed == 1 ? true : false
   }
   
+  // Box selected by user
   func boxChosen() {
     imagePicker.allowsEditing = false
     imagePicker.sourceType = .photoLibrary
@@ -137,13 +143,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
       }
   }
   
-  func sendPhotoView() {
-    let item: [Any] = [viewToImage()]
-    let activity = UIActivityViewController(activityItems: item, applicationActivities: nil)
-    activity.completionWithItemsHandler = { activity, success, items, error in self.animateBackPhotoView()}
-    present(activity, animated: true)
-  }
-
   private func translationPhotoView(gesture: UIPanGestureRecognizer) {
     let translation = gesture.translation(in: photoView)
     if viewOrientation < 3 {
@@ -171,6 +170,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     })
   }
   
+  func sendPhotoView() {
+    let item: [Any] = [viewToImage()] // Retrieves image corresponding to the frame with the selected photos
+    let activity = UIActivityViewController(activityItems: item, applicationActivities: nil)
+    activity.completionWithItemsHandler = { activity, success, items, error in self.animateBackPhotoView()}
+    present(activity, animated: true)
+  }
+
+  private func viewToImage() -> UIImage {
+    let renderer = UIGraphicsImageRenderer(size: photoView.bounds.size)
+    return(renderer.image { context in photoView.drawHierarchy(in: photoView.bounds, afterScreenUpdates: true)})
+  }
+  
   private func showMessage() {
       let alert = UIAlertController(title: "Unfinished Photo frame!", message: "Please, complete it before sending it.", preferredStyle: .alert)
     alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: {_ in self.animateBackPhotoView() }))
@@ -192,10 +203,5 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     photoView.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
     UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1
       , options: [] , animations: {self.photoView.transform = .identity}, completion: nil)
-  }
-    
-  private func viewToImage() -> UIImage {
-    let renderer = UIGraphicsImageRenderer(size: photoView.bounds.size)
-    return(renderer.image { context in photoView.drawHierarchy(in: photoView.bounds, afterScreenUpdates: true)})
   }
 }
