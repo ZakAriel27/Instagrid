@@ -13,15 +13,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
   var layoutUsed      = 0         // layout to be displayed
   var frameFilling    = 0         // Calculated value to know boxes containing a photo
   var tagBox          = 0         // Tag corresponding to the button pressed (image box)
-  var iTag            = [0,0,0,0] // Indirection between tags and indexes
+  var iTag            = [0,0,0,0] // Indirection between tags and photoButtons indexes
   
   let imagePicker     = UIImagePickerController()
 
   @IBOutlet var       photoButtons: [UIButton]!   // Table of buttons in the layout displayed
   @IBOutlet weak var  photoView: UIView!          // View corresponding to the layout and photos displayed
- // @IBOutlet var       photos: [UIImageView]!      // ?
   @IBOutlet var       layoutButtons: [UIButton]!  // Table of buttons corresponding to the 3 layout models
-  @IBOutlet weak var  swipeLabel: UILabel!        // Swipe Label
+  @IBOutlet weak var  swipeLabel: UILabel!        // Swipe Label (up or left)
   
   @IBAction func layoutChoice(_ sender: UIButton) {
     layoutChosen(sender.tag)
@@ -32,7 +31,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     boxChosen()
   }
   
+  //____________________________________________________________
   // MARK: View Events
+  //------------------------------------------------------------
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -69,10 +70,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
   // Layout selected by user
   func layoutChosen(_ tag: Int) {
-    layoutButtons[layoutUsed].isSelected = false
+    let layoutOld = layoutUsed
     layoutUsed = tag
+    layoutButtons[layoutOld].isSelected = false
     layoutButtons[layoutUsed].isSelected = true
-    // Move if necessary and possible photo made invisible
+
     let frameCase = frameFilling > 0  && layoutUsed < 2 ? layoutUsed*10 + frameFilling : 0
     switch frameCase {
       case  2,7,12,17:
@@ -114,13 +116,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     present(imagePicker, animated: true, completion: nil)
   }
      
-  
-  // MARK: - UIImagePickerControllerDelegate Methods
+  //____________________________________________________________
+  // MARK: UIImagePickerControllerDelegate Methods
+  //------------------------------------------------------------
   
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
     if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
       frameFilling += photoButtons[iTag[tagBox]].image(for: UIControl.State.normal)?.description.contains("PlusPhoto") ?? false ? tagBox*tagBox + 1 : 0
       photoButtons[iTag[tagBox]].setImage(pickedImage, for: UIControl.State.normal)
+      photoButtons[iTag[tagBox]].imageView?.contentMode = .scaleAspectFill
       dismiss(animated: true, completion: nil)
     }
   }
@@ -129,8 +133,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
       dismiss(animated: true, completion: nil)
   }
 
-  
+  //____________________________________________________________
   // MARK: Swipe Event
+  //------------------------------------------------------------
   
   @objc func swipePhotoView(_ sender: UIPanGestureRecognizer) {
       switch sender.state {
